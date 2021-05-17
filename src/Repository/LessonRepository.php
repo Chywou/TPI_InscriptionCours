@@ -19,6 +19,17 @@ class LessonRepository extends ServiceEntityRepository
         parent::__construct($registry, Lesson::class);
     }
 
+    public function findOrderByDate()
+    {
+        return $this->createQueryBuilder('l')
+            ->where('l.dateLesson >= CURRENT_DATE()')
+            ->addorderBy('l.dateLesson', 'ASC')
+            ->addorderBy('l.startHour', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     // /**
     //  * @return Lesson[] Returns an array of Lesson objects
     //  */
