@@ -19,6 +19,10 @@ class LessonRepository extends ServiceEntityRepository
         parent::__construct($registry, Lesson::class);
     }
 
+    /**
+     * Recupère tous les cours trié par date, puis par heure.
+     * Ne recupère pas les cours passés
+     */
     public function findOrderByDate()
     {
         return $this->createQueryBuilder('l')

@@ -10,13 +10,12 @@
       <li class="list-group-item flex-fill col-md-6 col border-0 p-2 p-md-2 bg-light font-weight-light h5 mb-0">Cours {{lesson.category.name }} du {{lesson.DateLesson|date('d.m.y') }} de {{lesson.startHour|date('H:i') }} à {{lesson.endHour|date('H:i') }}</li>
       <li class="list-group-item flex-fill col-md-2 col border-0 p-0 p-md-2 bg-light ">Places : {{lesson.peopleNumber }}</li>
       <li class="list-group-item flex-fill col-md-2 col border-0 p-0 p-md-2 bg-light ">{{lesson.user.firstName }} {{lesson.user.lastName }}</li>
-      <li class="list-group-item flex-fill col-md-2 col border-0 p-2 p-md-2 bg-light "><button type="button" class="btn btn-outline-dark">S'inscrire</button></li>
+      <li class="list-group-item flex-fill col-md-2 col border-0 p-2 p-md-2 bg-light ">
+      {% for participant in lesson.participants %}
+        {{participant.firstName}} {{participant.lastName}} {{participant.dogName}}
+      {% endfor %}
+      </li>
     </ul>
     {% endfor %}
-    
-  <div class="navigation d-flex justify-content-center mt-3">
-    {{ knp_pagination_render(allLessons) }}
-  </div>
 </div>
-
 {% endblock %}
