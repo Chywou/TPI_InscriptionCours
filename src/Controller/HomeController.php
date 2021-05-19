@@ -24,7 +24,7 @@ class HomeController extends AbstractController
     public function index(Request $request, PaginatorInterface $paginator): Response
     {
         $datas = $this->lesson->findOrderByDate();
-        $allLessons = $paginator->paginate($datas, $request->query->getInt('page', 1), 3);
+        $allLessons = $paginator->paginate($datas, $request->query->getInt('page', 1), 5);
         return $this->render('pages/home.html.twig', ['allLessons' => $allLessons]);
     }
 }
