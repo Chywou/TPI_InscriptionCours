@@ -1,0 +1,93 @@
+<?php
+
+namespace App\Entity;
+
+use App\Repository\ParticipantRepository;
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @ORM\Entity(repositoryClass=ParticipantRepository::class)
+ */
+class Participant
+{
+    /**
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
+     */
+    private $id;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $lastName;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $firstName;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $dogName;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Lesson::class, inversedBy="participants")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $lesson;
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+    
+    public function getLastName(): ?string
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName(string $lastName): self
+    {
+        $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    public function getFirstName(): ?string
+    {
+        return $this->firstName;
+    }
+
+    public function setFirstName(string $firstName): self
+    {
+        $this->firstName = $firstName;
+
+        return $this;
+    }
+
+    public function getDogName(): ?string
+    {
+        return $this->dogName;
+    }
+
+    public function setDogName(string $dogName): self
+    {
+        $this->dogName = $dogName;
+
+        return $this;
+    }
+
+    public function getLesson(): ?Lesson
+    {
+        return $this->lesson;
+    }
+
+    public function setLesson(?Lesson $lesson): self
+    {
+        $this->lesson = $lesson;
+
+        return $this;
+    }
+}

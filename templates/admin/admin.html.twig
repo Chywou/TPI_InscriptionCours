@@ -1,0 +1,21 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Bonjour{% endblock %}
+
+{% block body %}
+<div class="my-5">
+    <h1 class="m-3 text-center text-md-left">Tous les cours</h1>
+    {% for lesson in allLessons %}
+    <ul class="list-group list-group-horizontal-md text-center row m-3">
+      <li class="list-group-item flex-fill col-md-6 col border-0 p-2 p-md-2 bg-light font-weight-light h5 mb-0">Cours {{lesson.category.name }} du {{lesson.DateLesson|date('d.m.y') }} de {{lesson.startHour|date('H:i') }} à {{lesson.endHour|date('H:i') }}</li>
+      <li class="list-group-item flex-fill col-md-2 col border-0 p-0 p-md-2 bg-light ">Places : {{lesson.peopleNumber }}</li>
+      <li class="list-group-item flex-fill col-md-2 col border-0 p-0 p-md-2 bg-light ">{{lesson.user.firstName }} {{lesson.user.lastName }}</li>
+      <li class="list-group-item flex-fill col-md-2 col border-0 p-2 p-md-2 bg-light ">
+      {% for participant in lesson.participants %}
+        {{participant.firstName}} {{participant.lastName}} {{participant.dogName}}
+      {% endfor %}
+      </li>
+    </ul>
+    {% endfor %}
+</div>
+{% endblock %}
