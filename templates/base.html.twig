@@ -16,28 +16,24 @@
     <body class="d-flex flex-column" style="min-height: 100vh;">
         <nav class="navbar navbar-expand-md navbar-dark bg-dark">
             <div class="container-md">
-                <a class="navbar-brand ml-3" href="{{ path('home')}}"><span class="font-weight-light h3">Cours</span><span class="font-weight-bold h3">Cyno</span></a>
+                <a class="navbar-brand ml-3" href="{{ path('home')}}"><span class="font-weight-light h3">Cours</span><span class="font-weight-bold h3 ">Cyno</span></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="collapse navbar-collapse d-md-flex justify-content-between" id="navbarSupportedContent">
+                <div class="collapse navbar-collapse d-md-flex justify-content-between text-center" id="navbarSupportedContent">
                     <ul class="navbar-nav mx-3">
                         <li class="nav-item">
-                            <a class="nav-link {% if app.request.get('_route') == 'home' %} active{% endif %}" href="{{ path('home')}}">Home</a>
+                            <a class="nav-link {% if app.request.get('_route') == 'home' %} active{% endif %}" href="{{ path('home')}}">Accueil</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link {% if app.request.get('_route') == 'admin_add_lesson' %} active{% endif %}" href="{{ path('admin_home')}}">Cours</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {% if app.request.get('_route') == 'admin_add_category' %} active{% endif %}" href="{{ path('admin_add_category')}}">Catégories</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {% if app.request.get('_route') == 'admin_add_manager' %} active{% endif %}" href="{{ path('admin_add_manager')}}">Résponsables</a>
-                        </li>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <li class="nav-item">
+                                <a class="nav-link {% if app.request.get('_route') == 'admin_home' %} active{% endif %}" href="{{ path('admin_home')}}">Gestion des cours</a>
+                            </li>
+                        {% endif %}
                     </ul>
-                    {% if is_granted('ROLE_USER') %}
+                    {% if is_granted('ROLE_ADMIN') %}
                     <div>
-                        <a href="{{ path('logout')}}" class="btn btn-outline-light">Déconnexion</a>
+                        <a href="{{ path('logout')}}" class="btn btn-outline-light mx-3">Déconnexion</a>
                     </div>
                     {% endif %}
                 </div>
