@@ -20,21 +20,27 @@
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <div class="collapse navbar-collapse d-md-flex justify-content-between" id="navbarSupportedContent">
                     <ul class="navbar-nav mx-3">
-                    <li class="nav-item">
-                        <a class="nav-link {% if app.request.get('_route') == 'home' %} active{% endif %}" href="{{ path('home')}}">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('home')}}">Link</a>
-                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if app.request.get('_route') == 'home' %} active{% endif %}" href="{{ path('home')}}">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if app.request.get('_route') == 'admin_add_lesson' %} active{% endif %}" href="{{ path('admin_home')}}">Cours</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if app.request.get('_route') == 'admin_add_category' %} active{% endif %}" href="{{ path('admin_add_category')}}">Catégories</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if app.request.get('_route') == 'admin_add_manager' %} active{% endif %}" href="{{ path('admin_add_manager')}}">Résponsables</a>
+                        </li>
                     </ul>
+                    {% if is_granted('ROLE_USER') %}
+                    <div>
+                        <a href="{{ path('logout')}}" class="btn btn-outline-light">Déconnexion</a>
+                    </div>
+                    {% endif %}
                 </div>
-                {% if is_granted('ROLE_USER') %}
-                <div class="d-flex">
-                    <a href="{{ path('logout')}}" class="btn btn-outline-light">Déconnexion</a>
-                </div>
-                {% endif %}
             </div>
         </nav>
         <div class="container-md">
