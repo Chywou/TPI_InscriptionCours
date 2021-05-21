@@ -1,0 +1,16 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Bonjour{% endblock %}
+
+{% block body %}
+<div class="mt-3 mb-3 p-0 mx-auto">
+    <h2 class="mb-3 text-center">Mon profil</h2>
+    {{form_start(form, {'attr': {'class': 'col-md-6 m-auto'}})}}
+        {{form_widget(form)}}
+        <div class="text-center">
+            <button class="btn btn-primary" type="submit">Modifier</button>
+        </div>
+    {{form_end(form)}} 
+</div>
+
+{% endblock %}

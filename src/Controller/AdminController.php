@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Lesson;
 use App\Entity\Category;
 use App\Entity\User;
+use App\Form\ModifyAdminType;
 use App\Form\AddLessonType;
 use App\Form\AddCategoryType;
 use App\Form\AddManagerType;
@@ -19,7 +20,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
-* Demande le role admin pour tout l'accès de ce contrôler
+* Demande le rôle admin pour l'accès de ce contrôler
 *
 * @IsGranted("ROLE_ADMIN")
 */
@@ -99,5 +100,23 @@ class AdminController extends AbstractController
             return $this->redirectToRoute('admin_home');
         }
         return $this->render('admin/add_manager.html.twig',['form' => $form->createView()]);
+    }
+
+    /**
+     * @Route("/admin/profil", name="modify_admin")
+     */
+    public function modifyAdmin(Request $request): Response
+    {
+        $user = $this->getUser();
+        $form = $this->createForm(ModifyAdminType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $this->om->getManager()->persist($user);
+            $this->om->getManager()->flush();
+            return $this->redirectToRoute('admin_home');
+        }
+        return $this->render('admin/modify_admin.html.twig',['form' => $form->createView()]);
     }
 }

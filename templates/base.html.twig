@@ -29,6 +29,9 @@
                             <li class="nav-item">
                                 <a class="nav-link {% if app.request.get('_route') == 'admin_home' %} active{% endif %}" href="{{ path('admin_home')}}">Gestion des cours</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link {% if app.request.get('_route') == 'modify_admin' %} active{% endif %}" href="{{ path('modify_admin')}}">Mon profil</a>
+                            </li>
                         {% endif %}
                     </ul>
                     {% if is_granted('ROLE_ADMIN') %}
