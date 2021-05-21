@@ -3,8 +3,14 @@
 {% block title %}Bonjour{% endblock %}
 
 {% block body %}
-<div class="my-5">
+<div class="my-4">
     <h1 class="m-3 text-center text-md-left">Tous les cours</h1>
+    <ul class="list-group list-group-horizontal-md text-center row m-3">
+      <li class="list-group-item flex-fill col-md-6 col border-0 p-2 p-md-2 bg-dark text-light d-none d-md-block">Catégorie et date</li>
+      <li class="list-group-item flex-fill col-md-2 col border-0 p-0 p-md-2 bg-dark text-light d-none d-md-block">Places</li>
+      <li class="list-group-item flex-fill col-md-2 col border-0 p-0 p-md-2 bg-dark text-light d-none d-md-block">Responsable</li>
+      <li class="list-group-item flex-fill col-md-2 col border-0 p-0 p-md-2 bg-dark text-light d-none d-md-block"></li>
+    </ul>
     {% for lesson in allLessons %}
     <ul class="list-group list-group-horizontal-md text-center row m-3">
       <li class="list-group-item flex-fill col-md-6 col border-0 p-2 p-md-2 bg-light font-weight-light h5 mb-0">Cours {{lesson.category.name }} du {{lesson.DateLesson|date('d.m.y') }} de {{lesson.startHour|date('H:i') }} à {{lesson.endHour|date('H:i') }}</li>
@@ -19,7 +25,7 @@
       <li class="list-group-item flex-fill col-md-2 col border-0 p-2 p-md-2 bg-light ">
       {% if date(lesson.DateLesson) < date() or lesson.participants|length >= lesson.peopleNumber %}
       {% else %}
-        <button type="button" class="btn btn-outline-dark">S'inscrire</button>
+        <a href="{{ path('register', {id: lesson.id})}}" class="btn btn-outline-dark">S'inscrire</a>
       {% endif %}
       </li>
     </ul>

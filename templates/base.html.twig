@@ -40,6 +40,14 @@
             </div>
         </nav>
         <div class="container-md">
+            {% for message in app.flashes('success') %}
+                <div class="alert alert-success mt-3 alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
         {% block body %}{% endblock %}
         </div>
         <footer class="footer border-top bg-light text-muted text-center mt-auto p-3">
