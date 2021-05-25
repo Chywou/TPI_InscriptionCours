@@ -7,14 +7,15 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+
 class ModifyAdminType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('email')
-            ->add('lastName')
-            ->add('firstName')
+            ->add('email', Null,  ['label' => 'Email'])
+            ->add('firstName', Null,  ['label' => 'Prénom'])
+            ->add('lastName', Null,  ['label' => 'Nom'])
         ;
     }
 

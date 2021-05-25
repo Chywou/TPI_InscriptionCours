@@ -9,6 +9,7 @@ use App\Form\ModifyAdminType;
 use App\Form\AddLessonType;
 use App\Form\AddCategoryType;
 use App\Form\AddManagerType;
+use App\Form\ModifyPasswordType;
 use App\Repository\LessonRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\UserRepository;
@@ -18,6 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
 * Demande le rôle admin pour l'accès de ce contrôler
@@ -105,18 +107,32 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin/profil", name="modify_admin")
      */
-    public function modifyAdmin(Request $request): Response
+    public function modifyAdmin(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
     {
         $user = $this->getUser();
+
         $form = $this->createForm(ModifyAdminType::class, $user);
         $form->handleRequest($request);
+
+        $formPassword = $this->createForm(ModifyPasswordType::class);
+        $formPassword->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid())
         {
             $this->om->getManager()->persist($user);
             $this->om->getManager()->flush();
-            return $this->redirectToRoute('admin_home');
+            $this->addFlash('success', 'Modification d\'informations effectuées');
         }
-        return $this->render('admin/modify_admin.html.twig',['form' => $form->createView()]);
+
+        if ($formPassword->isSubmitted() && $formPassword->isValid())
+        {
+            // Encodage du mot de passe
+            $user->setPassword($passwordEncoder->encodePassword($user, $formPassword->get('plainPassword')->getData()));
+
+            $this->om->getManager()->persist($user);
+            $this->om->getManager()->flush();
+            $this->addFlash('success', 'Mot de passe modifié');
+        }
+        return $this->render('admin/modify_admin.html.twig',['form' => $form->createView(), 'formPassword' => $formPassword->createView()]);
     }
 }
