@@ -16,28 +16,41 @@
     <body class="d-flex flex-column" style="min-height: 100vh;">
         <nav class="navbar navbar-expand-md navbar-dark bg-dark">
             <div class="container-md">
-                <a class="navbar-brand ml-3" href="{{ path('home')}}"><span class="font-weight-light h3">Cours</span><span class="font-weight-bold h3">Cyno</span></a>
+                <a class="navbar-brand ml-3" href="{{ path('home')}}"><span class="font-weight-light h3">Cours</span><span class="font-weight-bold h3 ">Cyno</span></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <div class="collapse navbar-collapse d-md-flex justify-content-between text-center" id="navbarSupportedContent">
                     <ul class="navbar-nav mx-3">
-                    <li class="nav-item">
-                        <a class="nav-link {% if app.request.get('_route') == 'home' %} active{% endif %}" href="{{ path('home')}}">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('home')}}">Link</a>
-                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if app.request.get('_route') == 'home' %} active{% endif %}" href="{{ path('home')}}">Accueil</a>
+                        </li>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <li class="nav-item">
+                                <a class="nav-link {% if app.request.get('_route') == 'admin_home' %} active{% endif %}" href="{{ path('admin_home')}}">Gestion des cours</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {% if app.request.get('_route') == 'modify_admin' %} active{% endif %}" href="{{ path('modify_admin')}}">Mon profil</a>
+                            </li>
+                        {% endif %}
                     </ul>
+                    {% if is_granted('ROLE_ADMIN') %}
+                    <div>
+                        <a href="{{ path('logout')}}" class="btn btn-outline-light mx-3">Déconnexion</a>
+                    </div>
+                    {% endif %}
                 </div>
-                {% if is_granted('ROLE_USER') %}
-                <div class="d-flex">
-                    <a href="{{ path('logout')}}" class="btn btn-outline-light">Déconnexion</a>
-                </div>
-                {% endif %}
             </div>
         </nav>
-        <div class="container-md">
+        <div class="container-md mb-3">
+            {% for message in app.flashes('success') %}
+                <div class="alert alert-success mt-3 alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
         {% block body %}{% endblock %}
         </div>
         <footer class="footer border-top bg-light text-muted text-center mt-auto p-3">

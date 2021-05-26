@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\ParticipantRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=ParticipantRepository::class)
@@ -18,16 +19,27 @@ class Participant
     private $id;
 
     /**
+     * @Assert\NotBlank
+     * @Assert\Regex(
+     *      pattern="/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð \-']+$/",
+     *      htmlPattern=false,
+     *      message="Veuillez entrer un nom valide")  
      * @ORM\Column(type="string", length=255)
      */
     private $lastName;
 
     /**
+     * @Assert\NotBlank
+     * @Assert\Regex(
+     *      pattern="/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð \-']+$/",
+     *      htmlPattern=false,
+     *      message="Veuillez entrer un prénom valide")  
      * @ORM\Column(type="string", length=255)
      */
     private $firstName;
 
     /**
+     * @Assert\NotBlank
      * @ORM\Column(type="string", length=255)
      */
     private $dogName;

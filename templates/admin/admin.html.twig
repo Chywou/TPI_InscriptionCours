@@ -4,18 +4,65 @@
 
 {% block body %}
 <div class="my-5">
-    <h1 class="m-3 text-center text-md-left">Tous les cours</h1>
+  <div class="d-md-flex justify-content-md-between m-3">
+    <h2 class="text-center text-md-left">Tous les cours</h2>
+    <div class="d-flex align-items-center">
+      <a href="{{ path('admin_add_lesson')}}" class="btn btn-outline-dark m-auto">Ajouter un cours</a>
+    </div>
+  </div>
     {% for lesson in allLessons %}
-    <ul class="list-group list-group-horizontal-md text-center row m-3">
-      <li class="list-group-item flex-fill col-md-6 col border-0 p-2 p-md-2 bg-light font-weight-light h5 mb-0">Cours {{lesson.category.name }} du {{lesson.DateLesson|date('d.m.y') }} de {{lesson.startHour|date('H:i') }} à {{lesson.endHour|date('H:i') }}</li>
-      <li class="list-group-item flex-fill col-md-2 col border-0 p-0 p-md-2 bg-light ">Places : {{lesson.peopleNumber }}</li>
-      <li class="list-group-item flex-fill col-md-2 col border-0 p-0 p-md-2 bg-light ">{{lesson.user.firstName }} {{lesson.user.lastName }}</li>
-      <li class="list-group-item flex-fill col-md-2 col border-0 p-2 p-md-2 bg-light ">
-      {% for participant in lesson.participants %}
-        {{participant.firstName}} {{participant.lastName}} {{participant.dogName}}
-      {% endfor %}
-      </li>
-    </ul>
+      <ul class="list-group list-group-horizontal-md text-center row m-3">
+        <li class="list-group-item flex-fill col-md-6 col border-0 p-2 p-md-2 bg-light font-weight-light h5 mb-0">Cours {{lesson.category.name }} du {{lesson.DateLesson|date('d.m.y') }} de {{lesson.startHour|date('H:i') }} à {{lesson.endHour|date('H:i') }}</li>
+        <li class="list-group-item flex-fill col-md-2 col border-0 p-0 p-md-2 bg-light ">Places : {{lesson.peopleNumber }}</li>
+        <li class="list-group-item flex-fill col-md-2 col border-0 p-0 p-md-2 bg-light ">{{lesson.user.firstName }} {{lesson.user.lastName }}</li>
+        <li class="list-group-item flex-fill col-md-2 col border-0 p-2 p-md-2 bg-light ">
+          {% if lesson.participants|length == 0 %}
+            Aucun participant
+          {% else %}
+            <button class="btn btn-outline-success" type="button" data-toggle="collapse" data-target="#id{{lesson.id }}" aria-expanded="false" aria-controls="#id{{lesson.id }}">Les participants</button>
+          {% endif %}
+        </li>
+      </ul>
+      <div class="collapse mx-3" id="id{{lesson.id }}">
+        <div class="list-group list-group-flush col-md-6 m-auto p-0">
+          <div class="list-group-item d-flex bg-light">
+            <div class="col-6 p-2">Prénom et nom</div>
+            <div class="col-6 p-2">Nom du chien</div>
+          </div>
+          {% for participant in lesson.participants %}
+            <div class="list-group-item d-flex">
+              <div class="col p-2">{{participant.firstName}} {{participant.lastName}}</div>
+              <div class="col p-2">{{participant.dogName}}</div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
     {% endfor %}
+  <hr class="bg-success mt-5" >
+  <div class="d-md-flex justify-content-md-between m-3">
+    <h2 class=" text-center text-md-left">Toutes les catégories</h2>
+    <div class="d-flex align-items-center">
+      <a href="{{ path('admin_add_category')}}" class="btn btn-outline-dark m-auto">Ajouter une catégorie</a>
+    </div>
+  </div>
+  {% for category in allCategories %}
+    <ul class="list-group list-group-horizontal-md text-center row m-3">
+      <li class="list-group-item flex-fill col-md-12 col border-0 p-2 p-md-2 bg-light font-weight-light h5 mb-0">{{ category.name }}</li>
+    </ul>
+  {% endfor %}
+  
+  <hr class="bg-success mt-5" >
+  <div class="d-md-flex justify-content-md-between m-3">
+    <h2 class=" text-center text-md-left">Tous les responsables</h2>
+    <div class="d-flex align-items-center">
+      <a href="{{ path('admin_add_manager')}}" class="btn btn-outline-dark m-auto">Ajouter un responsable</a>
+    </div>
+  </div>
+  {% for manager in allManagers %}
+    <ul class="list-group list-group-horizontal-md text-center row m-3">
+      <li class="list-group-item flex-fill col-md-12 col border-0 p-2 p-md-2 bg-light font-weight-light h5 mb-0">{{ manager.firstName }} {{ manager.lastName }}</li>
+    </ul>
+  {% endfor %}
+
 </div>
 {% endblock %}

@@ -6,6 +6,7 @@ use App\Repository\LessonRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=LessonRepository::class)
@@ -20,11 +21,13 @@ class Lesson
     private $id;
 
     /**
+     * @Assert\GreaterThan("today UTC", message = "La date doit être dans le futur.")
      * @ORM\Column(type="date")
      */
     private $dateLesson;
 
     /**
+     * @Assert\LessThan(propertyPath = "startHour", message = "Le cours doit commencer avant l'heure de fin.")
      * @ORM\Column(type="time")
      */
     private $startHour;
@@ -35,6 +38,7 @@ class Lesson
     private $endHour;
 
     /**
+     * @Assert\Positive(message="Le nombre de participant doit être supérieur à {{ compared_value }}.")
      * @ORM\Column(type="smallint")
      */
     private $peopleNumber;

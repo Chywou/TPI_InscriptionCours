@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -21,6 +22,8 @@ class User implements UserInterface
     private $id;
 
     /**
+     * @Assert\Email
+     * @Assert\NotBlank
      * @ORM\Column(type="string", length=180, unique=true, nullable=true)
      */
     private $email;
@@ -37,11 +40,20 @@ class User implements UserInterface
     private $password;
 
     /**
+     * @Assert\Regex(
+     *      pattern="/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð \-']+$/",
+     *      htmlPattern=false,
+     *      message="Veuillez entrer un nom valide")
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $lastName;
 
     /**
+     * @Assert\NotBlank
+     * @Assert\Regex(
+     *      pattern="/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð \-']+$/",
+     *      htmlPattern=false,
+     *      message="Veuillez entrer un prénom valide")
      * @ORM\Column(type="string", length=255)
      */
     private $firstName;
@@ -89,7 +101,7 @@ class User implements UserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
+        // garanti à tous les utilisateurs d'avoir au minimum ROLE_USER
         $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
