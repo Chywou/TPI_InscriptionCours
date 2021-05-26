@@ -61,6 +61,7 @@ class AdminController extends AbstractController
         {
             $this->om->getManager()->persist($newLesson);
             $this->om->getManager()->flush();
+            $this->addFlash('success', 'Vous avez correctement ajouté le cours '. $newLesson->getCategory()->getName() . ' du ' . $newLesson->getDateLesson()->format('d.m.Y'). ' de ' . $newLesson->getStartHour()->format('H:i') . ' à ' . $newLesson->getEndHour()->format('H:i'));
             return $this->redirectToRoute('admin_home');
         }
         return $this->render('admin/add_lesson.html.twig',['form' => $form->createView()]);
