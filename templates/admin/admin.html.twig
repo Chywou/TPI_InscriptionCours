@@ -1,6 +1,6 @@
 {% extends "base.html.twig" %}
 
-{% block title %}Bonjour{% endblock %}
+{% block title %}Gestion des cours{% endblock %}
 
 {% block body %}
 <div class="my-5">
@@ -38,6 +38,9 @@
         </div>
       </div>
     {% endfor %}
+  <div class="navigation d-flex justify-content-center mt-3 text-success">
+    {{ knp_pagination_render(allLessons) }}
+  </div>
   <hr class="bg-success mt-5" >
   <div class="d-md-flex justify-content-md-between m-3">
     <h2 class=" text-center text-md-left">Toutes les catégories</h2>

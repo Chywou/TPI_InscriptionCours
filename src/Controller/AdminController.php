@@ -9,6 +9,7 @@ use App\Form\ModifyAdminType;
 use App\Form\AddLessonType;
 use App\Form\AddCategoryType;
 use App\Form\AddManagerType;
+use App\Form\AddAdminType;
 use App\Form\ModifyPasswordType;
 use App\Repository\LessonRepository;
 use App\Repository\CategoryRepository;
@@ -20,6 +21,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Knp\Component\Pager\PaginatorInterface;
 
 /**
 * Demande le rôle admin pour l'accès de ce contrôler
@@ -40,9 +42,10 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin/home", name="admin_home")
      */
-    public function index(): Response
+    public function index(Request $request, PaginatorInterface $paginator): Response
     {
-        $allLessons = $this->lesson->findOrderByDate();
+        $datas = $this->lesson->findOrderByDate();
+        $allLessons = $paginator->paginate($datas, $request->query->getInt('page', 1), 5);
         $allCategories = $this->category->findAll();
         $allManagers = $this->user->findAll();
         return $this->render('admin/admin.html.twig', ['allLessons' => $allLessons, 'allCategories' => $allCategories, 'allManagers' => $allManagers]);
@@ -87,7 +90,7 @@ class AdminController extends AbstractController
     }
     
     /**
-     * @Route("/admin/addmanager", name="admin_add_manager")
+     * @Route("/admin/addManager", name="admin_add_manager")
      */
     public function addManager(Request $request): Response
     {
@@ -135,5 +138,33 @@ class AdminController extends AbstractController
             $this->addFlash('success', 'Mot de passe modifié');
         }
         return $this->render('admin/modify_admin.html.twig',['form' => $form->createView(), 'formPassword' => $formPassword->createView()]);
+    }
+
+    /**
+     * @Route("/admin/addAdmin", name="admin_add_admin")
+     */
+    public function addAdmin(Request $request): Response
+    {
+        $newAdmin = new User();
+        $form = $this->createForm(AddAdminType::class, $newAdmin);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $newAdmin->setRoles(["ROLE_ADMIN"]);
+            $this->om->getManager()->persist($newAdmin);
+            $this->om->getManager()->flush();
+            return $this->redirectToRoute('admin_management');
+        }
+        return $this->render('admin/add_admin.html.twig',['form' => $form->createView()]);
+    }
+
+    /**
+     * @Route("/admin/adminManagement", name="admin_management")
+     */
+    public function adminManagement(): Response
+    {
+        $allAdmins = $this->user->findByRoles('ROLE_ADMIN');
+        return $this->render('admin/admin_management.html.twig', ['allAdmins' => $allAdmins]);
     }
 }
