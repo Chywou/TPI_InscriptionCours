@@ -154,7 +154,9 @@ class AdminController extends AbstractController
             $newAdmin->setRoles(["ROLE_ADMIN"]);
             $this->om->getManager()->persist($newAdmin);
             $this->om->getManager()->flush();
-            return $this->redirectToRoute('admin_management');
+            $this->addFlash('success', 'Vous avez créé l\'administrateur ' . $newAdmin->getFirstName() . ' ' . $newAdmin->getLastName());
+
+            return $this->redirectToRoute('create_password', ['email' => $newAdmin->getEmail()]);
         }
         return $this->render('admin/add_admin.html.twig',['form' => $form->createView()]);
     }

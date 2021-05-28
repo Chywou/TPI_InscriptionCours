@@ -1,12 +1,12 @@
 {% extends "base.html.twig" %}
 
-{% block title %}S'inscrire{% endblock %}
+{% block title %}Mail envoyé{% endblock %}
 
 {% block body %}
 <div class="mt-3 mb-3 p-0 mx-auto text-center">
     <h2 class="mb-3">Mail envoyé</h2>
-    <p>Si l'adresse rentrée correspond a un utilisateur, le mail a été envoyé. </p>
-    <a href="{{ path('login')}}" class="btn btn-outline-success mt-3">Retour</a>
+    <p>Si l'adresse rentrée correspond a un utilisateur, un mail contenant le nouveau mot de passe a été envoyé. </p>
+    <a href="{{ path('login')}}" class="btn btn-outline-success mt-3">Connexion</a>
 </div>
 
 {% endblock %}

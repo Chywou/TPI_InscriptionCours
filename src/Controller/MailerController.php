@@ -7,13 +7,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Mailer\MailerInterface;
 use App\Form\ForgotPasswordType;
-use Symfony\Component\Mime\Email;
 use App\Repository\UserRepository;
 use App\Entity\User;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 class MailerController extends AbstractController
 {
@@ -24,7 +24,7 @@ class MailerController extends AbstractController
         $this->user = $user;
     }
 
-    public function sendEmail(User $user, $random)
+    public function sendEmail(User $user, $random, $template)
     { 
 
         $email = (new TemplatedEmail())
@@ -35,7 +35,7 @@ class MailerController extends AbstractController
             //->replyTo('fabien@example.com')
             //->priority(Email::PRIORITY_HIGH)
             ->subject('Mot de passe perdu')
-            ->htmlTemplate('emails/new_password.html.twig')
+            ->htmlTemplate($template)
             ->context(['user' => $user, 'random' => $random])
             
             ;
@@ -43,6 +43,24 @@ class MailerController extends AbstractController
         $this->mailer->send($email);
     }
 
+    public function generatePassword()
+    {
+        $patern = "/(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\W+_])/";
+        $isValide = false;
+        
+        do
+        {
+            $random = substr(base64_encode(random_bytes(12)), 0, -2);
+
+            if(strlen($random) >= 12 and preg_match($patern, $random))
+            {
+                $isValide = true;
+            }
+        } while(!$isValide);
+
+        return $random;
+
+    }
 
     
     /**
@@ -55,33 +73,49 @@ class MailerController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $patern = "/(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\W+_])/";
-            $isValide = false;
-            
-            do
-            {
-                $random = substr(base64_encode(random_bytes(12)), 0, -2);
-    
-                if(strlen($random) >= 12 and preg_match($patern, $random))
-                {
-                    $isValide = true;
-                }
-            } while(!$isValide);
-
-
             $userForgot = $this->user->findOneBy(['email' => $form->getData('email')]);
 
-            $userForgot->setPassword($passwordEncoder->encodePassword($userForgot, $random));
+            if(!empty($userForgot))
+            {
 
-            $this->om->getManager()->persist($userForgot);
-            $this->om->getManager()->flush();
-            
-            
-            $this->sendEmail($userForgot, $random);
+                $random = $this->generatePassword();
+
+                $userForgot->setPassword($passwordEncoder->encodePassword($userForgot, $random));
+
+                $this->om->getManager()->persist($userForgot);
+                $this->om->getManager()->flush();
+                
+                
+                $this->sendEmail($userForgot, $random, 'emails/new_password.html.twig');
+            }
 
             return $this->render('security/mail_send.html.twig',['form' => $form->createView()]);
         }
         return $this->render('security/forgot_password.html.twig',['form' => $form->createView()]);
         
+    }
+
+    /**
+     * @IsGranted("ROLE_ADMIN")
+     * @Route("/createPassword{email}", name="create_password")
+     */
+    public function createPassword($email, UserPasswordEncoderInterface $passwordEncoder): Response
+    {
+
+        $newUser = $this->user->findOneBy(['email' => $email]);
+
+        if (is_null($newUser->getPassword()))
+        {
+
+            $random = $this->generatePassword();
+
+            $newUser->setPassword($passwordEncoder->encodePassword($newUser, $random));
+
+            $this->om->getManager()->persist($newUser);
+            $this->om->getManager()->flush();
+            $this->sendEmail($newUser, $random, 'emails/create_password.html.twig');
+            
+        }
+        return $this->redirectToRoute('admin_management');
     }
 }
