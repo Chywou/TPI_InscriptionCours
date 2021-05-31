@@ -24,7 +24,7 @@ class MailerController extends AbstractController
         $this->user = $user;
     }
 
-    public function sendEmail(User $user, $random, $template)
+    public function sendEmail(User $user, $random, $template, $name)
     { 
 
         $email = (new TemplatedEmail())
@@ -34,7 +34,7 @@ class MailerController extends AbstractController
             //->bcc('bcc@example.com')
             //->replyTo('fabien@example.com')
             //->priority(Email::PRIORITY_HIGH)
-            ->subject('Mot de passe perdu')
+            ->subject($name)
             ->htmlTemplate($template)
             ->context(['user' => $user, 'random' => $random])
             
@@ -64,7 +64,8 @@ class MailerController extends AbstractController
 
     
     /**
-     * @Route("/forgotPassword", name="forgot_password")
+     * Page du mot de passe perdu
+     * @Route("/motDePasseOublie", name="forgot_password")
      */
     public function forgotPassword(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
     {
@@ -86,7 +87,7 @@ class MailerController extends AbstractController
                 $this->om->getManager()->flush();
                 
                 
-                $this->sendEmail($userForgot, $random, 'emails/new_password.html.twig');
+                $this->sendEmail($userForgot, $random, 'emails/new_password.html.twig', 'Mot de passe oublié');
             }
 
             return $this->render('security/mail_send.html.twig',['form' => $form->createView()]);
@@ -96,6 +97,7 @@ class MailerController extends AbstractController
     }
 
     /**
+     * Gestion de l'envoi du mot de passe lors de la création d'un admin
      * @IsGranted("ROLE_ADMIN")
      * @Route("/createPassword{email}", name="create_password")
      */
@@ -113,7 +115,7 @@ class MailerController extends AbstractController
 
             $this->om->getManager()->persist($newUser);
             $this->om->getManager()->flush();
-            $this->sendEmail($newUser, $random, 'emails/create_password.html.twig');
+            $this->sendEmail($newUser, $random, 'emails/create_password.html.twig', 'Création d\'un compte');
             
         }
         return $this->redirectToRoute('admin_management');

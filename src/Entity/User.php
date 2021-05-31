@@ -23,7 +23,6 @@ class User implements UserInterface
 
     /**
      * @Assert\Email
-     * @Assert\NotBlank
      * @ORM\Column(type="string", length=180, unique=true, nullable=true)
      */
     private $email;
@@ -43,7 +42,7 @@ class User implements UserInterface
      * @Assert\Regex(
      *      pattern="/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð \-']+$/",
      *      htmlPattern=false,
-     *      message="Veuillez entrer un nom valide")
+     *      message="Veuillez entrer un nom valide.")
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $lastName;
@@ -53,7 +52,7 @@ class User implements UserInterface
      * @Assert\Regex(
      *      pattern="/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð \-']+$/",
      *      htmlPattern=false,
-     *      message="Veuillez entrer un prénom valide")
+     *      message="Veuillez entrer un prénom valide.")
      * @ORM\Column(type="string", length=255)
      */
     private $firstName;
