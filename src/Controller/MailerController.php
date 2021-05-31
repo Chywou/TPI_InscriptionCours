@@ -24,34 +24,38 @@ class MailerController extends AbstractController
         $this->user = $user;
     }
 
+    /**
+     * Envoi automatique de mail
+     */
     public function sendEmail(User $user, $random, $template, $name)
     { 
 
         $email = (new TemplatedEmail())
             ->from('support@courscyno.com')
             ->to($user->getEmail())
-            //->cc('cc@example.com')
-            //->bcc('bcc@example.com')
-            //->replyTo('fabien@example.com')
-            //->priority(Email::PRIORITY_HIGH)
             ->subject($name)
             ->htmlTemplate($template)
             ->context(['user' => $user, 'random' => $random])
-            
             ;
 
         $this->mailer->send($email);
     }
 
+    /**
+     * Génère automatiquement un mot de passe respectant la politique de mot de passse
+     */
     public function generatePassword()
     {
+        // Paterne respectant la polotique de mot de passe
         $patern = "/(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\W+_])/";
         $isValide = false;
         
         do
         {
+            // Génère une chaîne de caractère aléatoire
             $random = substr(base64_encode(random_bytes(12)), 0, -2);
 
+            // Vérifie si le mot de passe respecte la politique de mot de passe
             if(strlen($random) >= 12 and preg_match($patern, $random))
             {
                 $isValide = true;
@@ -74,11 +78,12 @@ class MailerController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
+            // Récupère l'utilisateur indiqué
             $userForgot = $this->user->findOneBy(['email' => $form->getData('email')]);
 
+            // Vérifie que l'utilisateur existe dans la BD
             if(!empty($userForgot))
             {
-
                 $random = $this->generatePassword();
 
                 $userForgot->setPassword($passwordEncoder->encodePassword($userForgot, $random));
@@ -106,6 +111,7 @@ class MailerController extends AbstractController
 
         $newUser = $this->user->findOneBy(['email' => $email]);
 
+        // Vérifie qu'il s'agisse bien d'un nouvel utilisateur
         if (is_null($newUser->getPassword()))
         {
 

@@ -151,7 +151,11 @@ class AdminController extends AbstractController
                 $this->om->getManager()->flush();
                 $this->addFlash('success', 'Modification d\'informations effectuées');
             }
-            $this->addFlash('danger', 'Un administrateur avec l\'adresse mail  ' . $user->getEmail() . ' existe déjà.');
+            else
+            {
+                $this->addFlash('danger', 'Un administrateur avec l\'adresse mail  ' . $user->getEmail() . ' existe déjà.');
+            }
+            
         }
 
         // Vérification pour la modification du mot de passe
