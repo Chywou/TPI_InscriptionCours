@@ -144,9 +144,14 @@ class AdminController extends AbstractController
         // Vérification pour les modification des informations personnelles
         if ($form->isSubmitted() && $form->isValid())
         {
-            $this->om->getManager()->persist($user);
-            $this->om->getManager()->flush();
-            $this->addFlash('success', 'Modification d\'informations effectuées');
+            // Vérifie que l'adresse mail n'est pas déjà présente dans la BD
+            if(is_null($this->user->findOneBy(['email' => $user->getEmail()])))
+            {
+                $this->om->getManager()->persist($user);
+                $this->om->getManager()->flush();
+                $this->addFlash('success', 'Modification d\'informations effectuées');
+            }
+            $this->addFlash('danger', 'Un administrateur avec l\'adresse mail  ' . $user->getEmail() . ' existe déjà.');
         }
 
         // Vérification pour la modification du mot de passe
@@ -174,13 +179,17 @@ class AdminController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $newAdmin->setRoles(["ROLE_ADMIN"]);
-            $this->om->getManager()->persist($newAdmin);
-            $this->om->getManager()->flush();
-            $this->addFlash('success', 'Vous avez créé l\'administrateur ' . $newAdmin->getFirstName() . ' ' . $newAdmin->getLastName());
+            if(is_null($this->user->findOneBy(['email' => $newAdmin->getEmail()])))
+            {
+                $newAdmin->setRoles(["ROLE_ADMIN"]);
+                $this->om->getManager()->persist($newAdmin);
+                $this->om->getManager()->flush();   
+                $this->addFlash('success', 'Vous avez créé l\'administrateur ' . $newAdmin->getFirstName() . ' ' . $newAdmin->getLastName());
 
-            // Envoi du mail contenant le mot de passe
-            return $this->redirectToRoute('create_password', ['email' => $newAdmin->getEmail()]);
+                // Envoi du mail contenant le mot de passe
+                return $this->redirectToRoute('create_password', ['email' => $newAdmin->getEmail()]);
+            }
+            $this->addFlash('danger', 'Un administrateur avec l\'adresse mail  ' . $newAdmin->getEmail() . ' existe déjà.');
         }
         return $this->render('admin/add_admin.html.twig',['form' => $form->createView()]);
     }

@@ -16,7 +16,7 @@ class ModifyAdminType extends AbstractType
     {
         $builder
             ->add('oldPassword',  PasswordType::class, [
-                'label'             => 'Ancien mot de passe',
+                'label'             => 'Mot de passe actuel',
                 'mapped'            => false,
                 'constraints'       => [
                     new UserPassword(['message' => 'Veuillez entrer votre ancien mot de passe.'])
