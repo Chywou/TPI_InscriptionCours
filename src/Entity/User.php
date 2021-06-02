@@ -23,7 +23,7 @@ class User implements UserInterface
 
     /**
      * @Assert\Email
-     * @ORM\Column(type="string", length=256, unique=true, nullable=true)
+     * @ORM\Column(type="string", length=254, unique=true, nullable=true)
      */
     private $email;
 

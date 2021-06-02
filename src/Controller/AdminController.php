@@ -145,7 +145,7 @@ class AdminController extends AbstractController
         if ($form->isSubmitted() && $form->isValid())
         {
             // Vérifie que l'adresse mail n'est pas déjà présente dans la BD
-            if(is_null($this->user->findOneBy(['email' => $user->getEmail()])))
+            if(is_null($this->user->findOneBy(['email' => $user->getEmail()])) || $user->getId() == $this->user->findOneBy(['email' => $user->getEmail()])->getId())
             {
                 $this->om->getManager()->persist($user);
                 $this->om->getManager()->flush();

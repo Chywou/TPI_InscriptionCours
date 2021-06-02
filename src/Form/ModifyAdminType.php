@@ -19,7 +19,7 @@ class ModifyAdminType extends AbstractType
                 'label'             => 'Mot de passe actuel',
                 'mapped'            => false,
                 'constraints'       => [
-                    new UserPassword(['message' => 'Veuillez entrer votre ancien mot de passe.'])
+                    new UserPassword(['message' => 'Veuillez entrer votre mot de passe actuel.'])
                 ]
             ])
             ->add('email', Null,  ['label' => 'Email'])

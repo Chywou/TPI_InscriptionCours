@@ -12,7 +12,7 @@ class AddAdminType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('email', Null,  ['label' => 'E-mail'])
+            ->add('email', Null,  ['label' => 'Mail'])
             ->add('firstName', Null,  ['label' => 'Prénom'])
             ->add('lastName', Null,  ['label' => 'Nom'])
         ;
