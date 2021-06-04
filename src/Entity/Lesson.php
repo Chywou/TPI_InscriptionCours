@@ -20,6 +20,8 @@ class Lesson
      */
     private $id;
 
+    // src/Entity/Lesson.php
+
     /**
      * @Assert\GreaterThan("today UTC", message = "La date doit être dans le futur.")
      * @ORM\Column(type="date")
@@ -27,23 +29,25 @@ class Lesson
     private $dateLesson;
 
     /**
-     * @Assert\LessThan(propertyPath = "startHour", message = "Le cours doit commencer avant l'heure de fin.")
+     * @Assert\LessThan(propertyPath = "endHour", message = "Le cours doit commencer avant l'heure de fin.")
      * @ORM\Column(type="time")
      */
     private $startHour;
-
+    
     /**
      * @ORM\Column(type="time")
      */
     private $endHour;
 
     /**
+     * @Assert\NotBlank
      * @Assert\Positive(message="Le nombre de participant doit être supérieur à {{ compared_value }}.")
      * @ORM\Column(type="smallint")
      */
     private $peopleNumber;
 
     /**
+     * @Assert\NotBlank
      * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="lessons")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -55,6 +59,7 @@ class Lesson
     private $participants;
 
     /**
+     * @Assert\NotBlank
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="lessons")
      * @ORM\JoinColumn(nullable=false)
      */

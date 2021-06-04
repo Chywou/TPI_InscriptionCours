@@ -1,0 +1,21 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Gestion des cours{% endblock %}
+
+{% block body %}
+<div class="my-5">
+  <div class="d-md-flex justify-content-md-between m-3">
+    <h2 class=" text-center text-md-left">Tous les administrateurs</h2>
+    <div class="d-flex align-items-center">
+      <a href="{{ path('admin_add_admin')}}" class="btn btn-outline-success m-auto">Ajouter un administrateur</a>
+    </div>
+  </div>
+  {% for admin in allAdmins %}
+    <ul class="list-group list-group-horizontal-md text-center row m-3">
+      <li class="list-group-item flex-fill col-md-6 col border-0 p-2 p-md-2 bg-light font-weight-light h5 mb-0">{{ admin.firstName }} {{ admin.lastName }}</li>
+      <li class="list-group-item flex-fill col-md-6 col border-0 p-0 p-md-2 bg-light ">{{admin.email}}</li>
+    </ul>
+  {% endfor %}
+
+</div>
+{% endblock %}

@@ -1,6 +1,6 @@
 {% extends "base.html.twig" %}
 
-{% block title %}Bonjour{% endblock %}
+{% block title %}Gestion des cours{% endblock %}
 
 {% block body %}
 <div class="my-5">
@@ -10,10 +10,24 @@
       <a href="{{ path('admin_add_lesson')}}" class="btn btn-outline-dark m-auto">Ajouter un cours</a>
     </div>
   </div>
+    <ul class="list-group list-group-horizontal-md text-center row m-3">
+      <li class="list-group-item flex-fill col-md-6 col border-0 p-2 p-md-2 bg-dark text-light d-none d-md-block">Catégorie et date</li>
+      <li class="list-group-item flex-fill col-md-2 col border-0 p-0 p-md-2 bg-dark text-light d-none d-md-block">Places</li>
+      <li class="list-group-item flex-fill col-md-2 col border-0 p-0 p-md-2 bg-dark text-light d-none d-md-block">Responsable</li>
+      <li class="list-group-item flex-fill col-md-2 col border-0 p-0 p-md-2 bg-dark text-light d-none d-md-block"></li>
+    </ul>
     {% for lesson in allLessons %}
       <ul class="list-group list-group-horizontal-md text-center row m-3">
         <li class="list-group-item flex-fill col-md-6 col border-0 p-2 p-md-2 bg-light font-weight-light h5 mb-0">Cours {{lesson.category.name }} du {{lesson.DateLesson|date('d.m.y') }} de {{lesson.startHour|date('H:i') }} à {{lesson.endHour|date('H:i') }}</li>
-        <li class="list-group-item flex-fill col-md-2 col border-0 p-0 p-md-2 bg-light ">Places : {{lesson.peopleNumber }}</li>
+        <li class="list-group-item flex-fill col-md-2 col border-0 p-0 p-md-2 bg-light ">
+          {% if lesson.participants|length >= lesson.peopleNumber  %}
+            Cours complet
+          {% elseif lesson.peopleNumber -  lesson.participants|length  == 1 %}
+            {{lesson.peopleNumber -  lesson.participants|length }} place restante
+          {% else %}
+            {{lesson.peopleNumber -  lesson.participants|length }} places restantes
+          {% endif %}
+        </li>
         <li class="list-group-item flex-fill col-md-2 col border-0 p-0 p-md-2 bg-light ">{{lesson.user.firstName }} {{lesson.user.lastName }}</li>
         <li class="list-group-item flex-fill col-md-2 col border-0 p-2 p-md-2 bg-light ">
           {% if lesson.participants|length == 0 %}
@@ -38,6 +52,9 @@
         </div>
       </div>
     {% endfor %}
+  <div class="navigation d-flex justify-content-center mt-3 text-success">
+    {{ knp_pagination_render(allLessons) }}
+  </div>
   <hr class="bg-success mt-5" >
   <div class="d-md-flex justify-content-md-between m-3">
     <h2 class=" text-center text-md-left">Toutes les catégories</h2>

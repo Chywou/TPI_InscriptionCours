@@ -1,6 +1,6 @@
 {% extends "base.html.twig" %}
 
-{% block title %}Bonjour{% endblock %}
+{% block title %}Accueil{% endblock %}
 
 {% block body %}
 <div class="my-4">
@@ -17,8 +17,10 @@
       <li class="list-group-item flex-fill col-md-2 col border-0 p-0 p-md-2 bg-light ">
       {% if lesson.participants|length >= lesson.peopleNumber  %}
         Cours complet
+      {% elseif lesson.peopleNumber -  lesson.participants|length  == 1 %}
+        {{lesson.peopleNumber -  lesson.participants|length }} place restante
       {% else %}
-        {{lesson.participants|length}}/{{lesson.peopleNumber }}
+        {{lesson.peopleNumber -  lesson.participants|length }} places restantes
       {% endif %}
       </li>
       <li class="list-group-item flex-fill col-md-2 col border-0 p-0 p-md-2 bg-light ">{{lesson.user.firstName }} {{lesson.user.lastName }}</li>

@@ -23,8 +23,7 @@ class User implements UserInterface
 
     /**
      * @Assert\Email
-     * @Assert\NotBlank
-     * @ORM\Column(type="string", length=180, unique=true, nullable=true)
+     * @ORM\Column(type="string", length=254, unique=true, nullable=true)
      */
     private $email;
 
@@ -43,8 +42,8 @@ class User implements UserInterface
      * @Assert\Regex(
      *      pattern="/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð \-']+$/",
      *      htmlPattern=false,
-     *      message="Veuillez entrer un nom valide")
-     * @ORM\Column(type="string", length=255, nullable=true)
+     *      message="Veuillez entrer un nom valide.")
+     * @ORM\Column(type="string", length=50, nullable=true)
      */
     private $lastName;
 
@@ -53,8 +52,8 @@ class User implements UserInterface
      * @Assert\Regex(
      *      pattern="/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð \-']+$/",
      *      htmlPattern=false,
-     *      message="Veuillez entrer un prénom valide")
-     * @ORM\Column(type="string", length=255)
+     *      message="Veuillez entrer un prénom valide.")
+     * @ORM\Column(type="string", length=50)
      */
     private $firstName;
 
@@ -117,7 +116,7 @@ class User implements UserInterface
     /**
      * @see UserInterface
      */
-    public function getPassword(): string
+    public function getPassword(): ?string
     {
         return $this->password;
     }
