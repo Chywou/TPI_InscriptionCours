@@ -34,6 +34,18 @@ class LessonRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findVisibleOrderByDate()
+    {
+        return $this->createQueryBuilder('l')
+            ->andWhere('l.dateLesson >= CURRENT_DATE()')
+            ->andWhere('l.isVisible = true')
+            ->addorderBy('l.dateLesson', 'ASC')
+            ->addorderBy('l.startHour', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     // /**
     //  * @return Lesson[] Returns an array of Lesson objects
     //  */

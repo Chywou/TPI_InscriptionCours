@@ -65,6 +65,11 @@ class Lesson
      */
     private $user;
 
+    /**
+     * @ORM\Column(type="boolean", options={"default" :false})
+     */
+    private $isVisible;
+
     public function __construct()
     {
         $this->participants = new ArrayCollection();
@@ -173,6 +178,18 @@ class Lesson
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getIsVisible(): ?bool
+    {
+        return $this->isVisible;
+    }
+
+    public function setIsVisible(bool $isVisible): self
+    {
+        $this->isVisible = $isVisible;
 
         return $this;
     }

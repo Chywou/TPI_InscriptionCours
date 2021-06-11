@@ -207,4 +207,48 @@ class AdminController extends AbstractController
         $allAdmins = $this->user->findByRoles('ROLE_ADMIN');
         return $this->render('admin/admin_management.html.twig', ['allAdmins' => $allAdmins]);
     }
+    
+    /**
+     * Page de modification d'un cours
+     * @Route("/admin/modification:{id}", name="modifyLesson")
+     */
+    public function registerLesson($id, Request $request): Response
+    {
+
+        $lesson = $this->lesson->find($id);
+        $form = $this->createForm(AddlessonType::class, $lesson);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $this->om->getManager()->persist($lesson);
+            $this->om->getManager()->flush();
+            $this->addFlash('success', 'Vous avez correctement modifié ce cours');
+            return $this->redirectToRoute('admin_home');
+        }
+        return $this->render('admin/modify_lesson.html.twig',['lesson' => $lesson, 'form' => $form->createView()]);
+    }
+
+
+    /**
+     * Modification de la visibilité
+     * @Route("/admin/modificationVisibilité:{id}", name="modifyVisibility")
+     */
+    public function modifyVisibiliy($id): Response
+    {
+        $lesson = $this->lesson->find($id);
+
+        if($lesson->getIsVisible())
+        {
+            $lesson->setIsVisible(false);
+        }
+        else
+        {
+            $lesson->setIsVisible(true);
+        }
+        $this->om->getManager()->persist($lesson);
+        $this->om->getManager()->flush();
+
+        return $this->redirectToRoute('admin_home');
+    }
 }

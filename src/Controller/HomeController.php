@@ -28,7 +28,7 @@ class HomeController extends AbstractController
      */
     public function index(Request $request, PaginatorInterface $paginator): Response
     {
-        $datas = $this->lesson->findOrderByDate();
+        $datas = $this->lesson->findVisibleOrderByDate();
 
         // Détecte si le nombre passé dans le get est pertinant pour la pagination (plus grand que 0 et si c'est un chiffre)
         if($request->query->get('page') <= 0 || null !== $request->query->get('page') && !is_numeric($request->query->get('page')))
